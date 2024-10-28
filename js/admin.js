@@ -223,7 +223,120 @@ $(document).ready(function(){
                         table.column(3).search(this.value).draw()
                     }
                 });
+
+                $('#add-account').on('click', function(e){
+                    e.preventDefault()
+                    addAccount()
+                });
             }
         })
     }
+
+
+    function addAccount(){
+        $.ajax({
+            type: 'GET',
+            url: '../account/add-account.html',
+            dataType: 'html',
+            success: function(view){
+                $('.modal-container').html(view)
+                $('#modal-add-account').modal('show')
+
+                fetch_role()
+
+                $('#form-add-account').on('submit', function(e){
+                    e.preventDefault()
+                    saveAccount()
+                })
+            }
+        })
+    }
+    
+
+    function fetch_role(){
+        $.ajax({
+            url: '../account/fetch-role.php', // URL to the PHP script that returns the role
+            type: 'GET',
+            dataType: 'json', // Expect JSON response
+            success: function(data) {
+                // Clear the existing options (if any) and add a default "Select" option
+                $('#role').empty().append('<option value="">--Select--</option>');
+                
+                // Iterate through the data (categories) and append each one to the select dropdown
+                $.each(data, function(index, role) {
+                    $('#role').append(
+                        $('<option>', {
+                            value: role.role, // The value attribute
+                            text: role.role // The displayed text
+                        })
+                    );
+                });
+            }
+        });
+    }
+
+    function saveAccount() {
+        $.ajax({
+            type: 'POST',
+            url: '../account/add-account.php',
+            data: $('form').serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'error') {
+                    // First name validation
+                    if (response.first_nameErr) { 
+                        $('#first_name').addClass('is-invalid');
+                        $('#first_name').next('.invalid-feedback').text(response.first_nameErr).show();
+                    } else {
+                        $('#first_name').removeClass('is-invalid');
+                    }
+    
+                    // Last name validation
+                    if (response.last_nameErr) {
+                        $('#last_name').addClass('is-invalid');
+                        $('#last_name').next('.invalid-feedback').text(response.last_nameErr).show();
+                    } else {
+                        $('#last_name').removeClass('is-invalid');
+                    }
+    
+                    // Username validation
+                    if (response.usernameErr) {
+                        $('#username').addClass('is-invalid');
+                        $('#username').next('.invalid-feedback').text(response.usernameErr).show();
+                    } else {
+                        $('#username').removeClass('is-invalid');
+                    }
+    
+                    // Password validation
+                    if (response.passwordErr) {
+                        $('#password').addClass('is-invalid');
+                        $('#password').next('.invalid-feedback').text(response.passwordErr).show();
+                    } else {
+                        $('#password').removeClass('is-invalid');
+                    }
+                    
+                    if (response.confirmpasswordErr) {
+                        $('#confirmpassword').addClass('is-invalid');
+                        $('#confirmpassword').next('.invalid-feedback').text(response.confirmpasswordErr).show();
+                    } else {
+                        $('#confirmpassword').removeClass('is-invalid');
+                    }
+
+                    if (response.roleErr) {
+                        $('#role').addClass('is-invalid');
+                        $('#role').next('.invalid-feedback').text(response.roleErr).show();
+                    } else {
+                        $('#role').removeClass('is-invalid');
+                    }
+                    
+                } else if (response.status === 'success') {
+                    // Close modal and reset form on success
+                    $('#modal-add-account').modal('hide');
+                    $('#form-add-account')[0].reset();
+                    viewAccount();
+                }
+            }
+        });
+    }
+    
 });

@@ -8,7 +8,7 @@ class Account{
     public $last_name = '';
     public $username = '';
     public $password = '';
-    public $role = 'staff';
+    public $role = '';
     public $is_staff = true;
     public $is_admin = false;
 
@@ -83,7 +83,7 @@ class Account{
     }
 
     function get_accounts($search='',$role=''){
-        $sql = "SELECT first_name,last_name,role FROM account 
+        $sql = "SELECT first_name,last_name,username,role FROM account 
                     WHERE (first_name LIKE '%' :search '%' OR last_name LIKE '%' :search '%' OR role LIKE '%' :search '%') AND role LIKE '%' :role '%';";
         $query = $this->db->connect()->prepare($sql);
 
@@ -98,14 +98,13 @@ class Account{
     }
 
     function get_role(){
-        $sql = "SELECT DISTINCT(role) FROM account;";
+        $sql = "SELECT DISTINCT role FROM account ORDER BY role ASC;";
         $query = $this->db->connect()->prepare($sql);
 
         $data = null;
         if($query->execute()){
             $data = $query->fetchAll();
         }
-
         return $data;
     }
 }

@@ -16,7 +16,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <h4 class="page-title">Products</h4>
+                <h4 class="page-title">Accounts</h4>
             </div>
         </div>
     </div>
@@ -55,7 +55,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
                                 </select>
                             </div>
                         </div>
-                      
+                        <div class="page-title-right d-flex align-items-center"> 
+                                <a id="add-account" href="#" class="btn btn-primary brand-bg-color">Add Account</a>
+                            </div>                
                     </div>
                     
                     <div class="table-responsive">
@@ -65,6 +67,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
                                     <th class="text-start">No.</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
+                                    <th>Username</th>
                                     <th>Role</th>
                                 </tr>
                             </thead>
@@ -79,6 +82,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
                                         <td class="text-start"><?= $i ?></td>
                                         <td><?= $arr['first_name'] ?></td>
                                         <td><?= $arr['last_name'] ?></td>
+                                        <td><?= $arr['username'] ?></td>
                                         <td><?= $arr['role'] ?></td>
                                     </tr>
                                 <?php

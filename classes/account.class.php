@@ -81,6 +81,33 @@ class Account{
 
         return $data;
     }
+
+    function get_accounts($search='',$role=''){
+        $sql = "SELECT first_name,last_name,role FROM account 
+                    WHERE (first_name LIKE '%' :search '%' OR last_name LIKE '%' :search '%' OR role LIKE '%' :search '%') AND role LIKE '%' :role '%';";
+        $query = $this->db->connect()->prepare($sql);
+
+        $query->bindParam(':search', $search);
+        $query->bindParam(':role', $role);
+        $data = null;
+        if($query->execute()){
+            $data = $query->fetchAll();
+        }
+
+        return $data;
+    }
+
+    function get_role(){
+        $sql = "SELECT DISTINCT(role) FROM account;";
+        $query = $this->db->connect()->prepare($sql);
+
+        $data = null;
+        if($query->execute()){
+            $data = $query->fetchAll();
+        }
+
+        return $data;
+    }
 }
 
 // $obj = new Account();

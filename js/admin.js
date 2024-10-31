@@ -29,6 +29,8 @@ $(document).ready(function(){
         $('#dashboard-link').trigger('click')
     }else if (url.endsWith('products')){
         $('#products-link').trigger('click')
+    }else if (url.endsWith('accounts')){
+        $('#account-link').trigger('click')
     }else{
         $('#dashboard-link').trigger('click')
     }
